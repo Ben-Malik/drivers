@@ -29,5 +29,11 @@ public class DriverRepositoryImpl implements DriverRepository{
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public Driver getById(Long id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
 }

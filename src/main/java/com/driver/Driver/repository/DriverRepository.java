@@ -35,4 +35,10 @@ public interface DriverRepository {
      */
     List<Driver> getDriversCreatedAfter(Date date);
     
+    /**
+     * Grabs the driver having the given id.
+     * @param id The id whouse driver is sought.
+     * @return The driver having the given id and null otherwise.
+     */
+    Driver getById(Long id);
 }
