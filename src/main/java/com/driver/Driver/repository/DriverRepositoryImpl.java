@@ -5,11 +5,14 @@ import java.util.List;
 
 import com.driver.Driver.model.Driver;
 
+import org.springframework.stereotype.Repository;
+
 /** 
  * An implementation to the {@linkplain DriverRepository} interface.
  * 
  * @author ben-malik
  */
+@Repository("driverRepositoryImpl")
 public class DriverRepositoryImpl implements DriverRepository{
 
     @Override

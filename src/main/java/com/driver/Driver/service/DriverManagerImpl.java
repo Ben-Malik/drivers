@@ -9,12 +9,13 @@ import com.driver.Driver.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 /**
  * An implementation to the {@link DriverManager} interface.
  * 
  * @author ben-malik
  */
-@Service
+@Service("driverManagerImpl")
 public class DriverManagerImpl implements DriverManager{
 
     @Autowired
@@ -37,8 +38,7 @@ public class DriverManagerImpl implements DriverManager{
 
     @Override
     public Driver getById(Long id) {
-        // TODO Auto-generated method stub
-        return null;
+        return driverRepository.getById(id);
     }
     
 }

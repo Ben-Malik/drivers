@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class Driver {
-    
+
     private Long id;
 
     private String firstName;
@@ -25,7 +25,7 @@ public class Driver {
 
     private Date birthDate;
 
-    private Date createdAt;
+    private Date createdAt = new Date();
 
     public Long getId() {
         return id;
@@ -66,6 +66,5 @@ public class Driver {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-
     
 }

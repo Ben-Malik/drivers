@@ -5,14 +5,12 @@ import java.util.List;
 
 import com.driver.Driver.model.Driver;
 
-import org.springframework.stereotype.Repository;
 
 /**
  * The interface indicating all doable operations on the {@linkplain Driver} entity.
  * 
  * @author ben-malik
  */
-@Repository("DriverRepository")
 public interface DriverRepository {
 
     /**

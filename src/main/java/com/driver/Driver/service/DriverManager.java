@@ -29,6 +29,9 @@ public interface DriverManager {
      */
     Driver createDriver(Driver newDriver);
 
+     /**
+     * @see DriverRepository#getById(Long id)
+     */
     Driver getById(Long id);
 
 }
