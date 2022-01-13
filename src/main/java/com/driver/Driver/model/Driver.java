@@ -4,14 +4,18 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * A class encapsulating all the data about the drivers.
  * @author ben-malik
  */
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 public class Driver {
 
@@ -25,6 +29,7 @@ public class Driver {
     private String lastName;
 
     @JsonProperty("date_of_birth")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
 
     @JsonProperty("created_at")

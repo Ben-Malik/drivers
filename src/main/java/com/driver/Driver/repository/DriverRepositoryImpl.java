@@ -6,8 +6,10 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import com.driver.Driver.model.Driver;
@@ -25,6 +27,8 @@ import org.springframework.stereotype.Repository;
 public class DriverRepositoryImpl implements DriverRepository {
 
     private boolean writeToFileFlag = true; // True when available to use and false otherwise.
+
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public List<Driver> findAll() {
@@ -50,6 +54,7 @@ public class DriverRepositoryImpl implements DriverRepository {
 
     /**
      * A helper method to grab all the drivers available in the db flat file.
+     * 
      * @return A list of {@link Driver}
      */
     private List<Driver> getDriversDB() {
@@ -60,8 +65,8 @@ public class DriverRepositoryImpl implements DriverRepository {
         List<Driver> drivers = new ArrayList<>();
         try {
             drivers = mapper.readValue(inputStream, typeReference);
-            for (Driver d: drivers) 
-                System.out.println(d.toString());
+            for (Driver d : drivers)
+                d.setCreatedAt(formatDate(d.getCreatedAt()));
             System.out.println("Reading of Drivers Completed!");
         } catch (IOException e) {
             System.out.println("Unable to read drivers: " + e.getMessage());
@@ -72,43 +77,40 @@ public class DriverRepositoryImpl implements DriverRepository {
 
     /**
      * TODO write javadoc
+     * 
      * @param newDriver
      * @return
      */
     private Driver saveDriverToDB(Driver newDriver) {
         List<Driver> drivers = getDriversDB();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        
-        try {
-            Date formatedDate = sdf.parse(newDriver.getCreatedAt().toString());
-            newDriver.setCreatedAt(formatedDate);
-        } catch (ParseException e1) {
-            e1.printStackTrace();
-        }
-        drivers.add(newDriver);
-        
-        acquireFlag();
 
+        newDriver.setDateOfBirth(formatDate(newDriver.getDateOfBirth()));
+        newDriver.setCreatedAt(formatDate(newDriver.getCreatedAt()));
+        drivers.add(newDriver);
+
+        acquireFlag();
         ObjectMapper mapper = new ObjectMapper();
-        File file = new File("/db/drivers.json");
+        File file = new File(
+                getClass().getClassLoader().getResource("db/drivers.json").getFile());
         try {
             mapper.writeValue(file, drivers);
-            releaseFlag();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        releaseFlag();
         return newDriver;
     }
 
     /**
-     * Makes the flags unavailable for use to others if the flag itself isn't being used yet.
+     * Makes the flags unavailable for use to others if the flag itself isn't being
+     * used yet.
      */
     private void acquireFlag() {
-        if (writeToFileFlag) 
-            this.writeToFileFlag = false;  
-        else 
-            throw new IllegalStateException("The flag is currently not avaiable!");          
+        if (writeToFileFlag)
+            this.writeToFileFlag = false;
+        else
+            throw new IllegalStateException("The flag is currently not avaiable!");
     }
 
     /**
@@ -117,5 +119,28 @@ public class DriverRepositoryImpl implements DriverRepository {
     private void releaseFlag() {
         this.writeToFileFlag = true;
     }
-	
+
+    /**
+     * TODO write javadoc
+     * 
+     * @param date
+     * @return
+     */
+    private Date formatDate(Date date) {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        cal.setTime(date);
+        String output = "";
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        output = year + "-" + month + "-" + day;
+
+        try {
+            return SIMPLE_DATE_FORMAT.parse(output);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
