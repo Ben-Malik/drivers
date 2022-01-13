@@ -2,29 +2,32 @@ package com.driver.Driver.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * A class encapsulating all the data about the drivers.
  * @author ben-malik
  */
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @EqualsAndHashCode
 public class Driver {
 
+    @JsonProperty("id")
     private Long id;
 
+    @JsonProperty("firstname")
     private String firstName;
 
+    @JsonProperty("lastname")
     private String lastName;
 
-    private Date birthDate;
+    @JsonProperty("date_of_birth")
+    private Date dateOfBirth;
 
+    @JsonProperty("created_at")
     private Date createdAt = new Date();
 
     public Long getId() {
@@ -51,12 +54,12 @@ public class Driver {
         this.lastName = lastName;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public Date getCreatedAt() {
@@ -66,5 +69,11 @@ public class Driver {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "Driver [id=" + id + ", createdAt=" + createdAt + ", firstName=" + firstName +  ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + "]";
+    }
+    
     
 }

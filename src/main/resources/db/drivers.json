@@ -1,0 +1,23 @@
+[
+    {
+        "id": 0,
+        "firstname": "Oyku",
+        "lastname": "Celik",
+        "date_of_birth": "2000-02-23",
+        "created_at": "2022-01-13" 
+    },
+    {
+        "id": 1,
+        "firstname": "Ben Malik",
+        "lastname": "Tchamalam",
+        "date_of_birth": "1998-01-01",
+        "created_at": "2022-01-13" 
+    },
+    {
+        "id": 2,
+        "firstname": "Sevval",
+        "lastname": "Arikan",
+        "date_of_birth": "2000-02-23",
+        "created_at": "2022-01-13" 
+    }
+]

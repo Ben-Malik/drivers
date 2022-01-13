@@ -55,9 +55,5 @@ public class DriverController {
 		model.addAttribute("drivers", driverManager.getDriversCreatedAfter(date));
 		return "index";
 	}
-	
-    
-
-
     
 }
