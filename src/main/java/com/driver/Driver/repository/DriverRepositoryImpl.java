@@ -86,6 +86,7 @@ public class DriverRepositoryImpl implements DriverRepository {
 
         newDriver.setDateOfBirth(formatDate(newDriver.getDateOfBirth()));
         newDriver.setCreatedAt(formatDate(newDriver.getCreatedAt()));
+        newDriver.setId(Long.valueOf(drivers.size()));
         drivers.add(newDriver);
 
         acquireFlag();
