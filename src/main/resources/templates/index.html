@@ -36,7 +36,6 @@
         </table>
 
         <!-- Add new Driver modal-->
-        <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -53,16 +52,19 @@
 
                             <div class="form-group">
                                 <label for="exampleInputEmail1">First Name</label>
-                                <input type="text" class="form-control" th:field="*{firstName}" id="firstName" placeholder="First Name" minlength="2" maxlength="50" required>
+                                <input type="text" class="form-control" th:field="*{firstName}" id="firstName"
+                                    placeholder="First Name" minlength="2" maxlength="50" required>
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Last Name</label>
-                                <input type="text" class="form-control" th:field="*{lastName}" id="lastName" placeholder="Last Name" minlength="2" maxlength="50" required>
+                                <input type="text" class="form-control" th:field="*{lastName}" id="lastName"
+                                    placeholder="Last Name" minlength="2" maxlength="50" required>
                             </div>
                             <div class="form-group">
                                 <label for="dateOfBirth">Date of Birth</label>
-                                <input type="date" th:field="*{dateOfBirth}" class="form-control" id="dateOfBirth" th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"                                required>
+                                <input type="date" th:field="*{dateOfBirth}" class="form-control" id="dateOfBirth"
+                                    th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
@@ -72,14 +74,8 @@
         </div>
     </div>
 </body>
-
 <script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/1.12.9-1/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js}"></script>
-<script>
-    $('#addNewDriver').on('shown.bs.modal', function () {
-        $('#newDriverInput').trigger('focus')
-    })
-</script>
 
 </html>
