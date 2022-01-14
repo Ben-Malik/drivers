@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title> Java, Spring Boot + bootstrap | A Drivers Tracking Platform </title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} " />
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="add-button">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Add a new Driver
+            </button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th> First Name </th>
+                    <th> Last Name </th>
+                    <th> Date of Birth </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${drivers.empty}">
+                    <td colspan="2"> No Drivers Available </td>
+                </tr>
+                <tr th:each="driver : ${drivers}">
+                    <td><span th:text="${driver.firstName}"> First Name </span></td>
+                    <td><span th:text="${driver.lastName}"> Last Name </span></td>
+                    <td><span th:text="${driver.dateOfBirth}"> Date of Birth </span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Add new Driver modal-->
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add a new driver</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{/driver/create}" th:object="${newDriver}" method="post">
+                            <input th:field="*{id}" type="hidden" th:value="${newDriver.id}" />
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">First Name</label>
+                                <input type="text" class="form-control" th:field="*{firstName}" id="firstName" placeholder="First Name" minlength="2" maxlength="50" required>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Last Name</label>
+                                <input type="text" class="form-control" th:field="*{lastName}" id="lastName" placeholder="Last Name" minlength="2" maxlength="50" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateOfBirth">Date of Birth</label>
+                                <input type="date" th:field="*{dateOfBirth}" class="form-control" id="dateOfBirth" th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"                                required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js}"></script>
+<script>
+    $('#addNewDriver').on('shown.bs.modal', function () {
+        $('#newDriverInput').trigger('focus')
+    })
+</script>
+
+</html>
