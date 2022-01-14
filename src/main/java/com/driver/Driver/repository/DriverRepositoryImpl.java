@@ -10,8 +10,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import com.driver.Driver.exception.DriverAlreadyExistException;
 import com.driver.Driver.model.Driver;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +32,8 @@ public class DriverRepositoryImpl implements DriverRepository {
 
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
+    Logger logger = Logger.getLogger(DriverRepositoryImpl.class.getName());
+
     @Override
     public List<Driver> findAll() {
         return getDriversDB();
@@ -46,18 +50,14 @@ public class DriverRepositoryImpl implements DriverRepository {
         return drivers.stream().filter(a -> a.getCreatedAt().after(date)).collect(Collectors.toList());
     }
 
-    @Override
-    public Driver getById(Long id) {
-        List<Driver> drivers = findAll();
-        return drivers.stream().filter(a -> a.getId() == id).collect(Collectors.toList()).get(0);
-    }
-
     /**
      * A helper method to grab all the drivers available in the db flat file.
      * 
      * @return A list of {@link Driver}
      */
     private List<Driver> getDriversDB() {
+        logger.info("Reading of database file started ...");
+
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<List<Driver>> typeReference = new TypeReference<List<Driver>>() {
         };
@@ -67,26 +67,30 @@ public class DriverRepositoryImpl implements DriverRepository {
             drivers = mapper.readValue(inputStream, typeReference);
             for (Driver d : drivers)
                 d.setCreatedAt(formatDate(d.getCreatedAt()));
-            System.out.println("Reading of Drivers Completed!");
+            logger.info("Reading of drivers from database done!");;
         } catch (IOException e) {
-            System.out.println("Unable to read drivers: " + e.getMessage());
+           logger.severe("Unable to read drivers: " + e.getMessage());
         }
 
         return drivers;
     }
 
     /**
-     * TODO write javadoc
-     * 
-     * @param newDriver
-     * @return
+     * A helper method to save a given driver to the database.
+     * @param newDriver the new driver to be saved.
+     * @return The newly saved driver.
      */
     private Driver saveDriverToDB(Driver newDriver) {
-        List<Driver> drivers = getDriversDB();
+
+        List<Driver> drivers = findAll();
 
         newDriver.setDateOfBirth(formatDate(newDriver.getDateOfBirth()));
         newDriver.setCreatedAt(formatDate(newDriver.getCreatedAt()));
         newDriver.setId(Long.valueOf(drivers.size()));
+        
+        if (drivers.contains(newDriver)) {
+            throw new DriverAlreadyExistException(newDriver.getFirstName(), newDriver.getFirstName());
+        }
         drivers.add(newDriver);
 
         acquireFlag();
@@ -94,9 +98,11 @@ public class DriverRepositoryImpl implements DriverRepository {
         File file = new File(
                 getClass().getClassLoader().getResource("db/drivers.json").getFile());
         try {
+            logger.info("Saving of driver with name: " + newDriver.getFirstName() + " " + newDriver.getLastName() + " started...");
             mapper.writeValue(file, drivers);
+            logger.info("Saving completed!");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage());;
         }
 
         releaseFlag();
@@ -108,10 +114,13 @@ public class DriverRepositoryImpl implements DriverRepository {
      * used yet.
      */
     private void acquireFlag() {
-        if (writeToFileFlag)
+        if (writeToFileFlag) {
             this.writeToFileFlag = false;
-        else
-            throw new IllegalStateException("The flag is currently not avaiable!");
+            logger.info("Flag to write to the db successfully acquired!");
+        }
+        else {
+            logger.warning("Flag not available!");
+        }
     }
 
     /**
@@ -119,13 +128,14 @@ public class DriverRepositoryImpl implements DriverRepository {
      */
     private void releaseFlag() {
         this.writeToFileFlag = true;
+        logger.info("Flag released and available for use!");
     }
 
     /**
-     * TODO write javadoc
+     * A helper method to fromate a given date.
      * 
-     * @param date
-     * @return
+     * @param date The date to be formatted.
+     * @return The formatted version of the given date
      */
     private Date formatDate(Date date) {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
@@ -140,8 +150,9 @@ public class DriverRepositoryImpl implements DriverRepository {
         try {
             return SIMPLE_DATE_FORMAT.parse(output);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage());;
             return null;
         }
     }
+
 }

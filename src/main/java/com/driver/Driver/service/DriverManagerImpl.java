@@ -35,10 +35,5 @@ public class DriverManagerImpl implements DriverManager{
     public Driver createDriver(Driver newDriver) {
         return driverRepository.saveDriver(newDriver);
     }
-
-    @Override
-    public Driver getById(Long id) {
-        return driverRepository.getById(id);
-    }
     
 }

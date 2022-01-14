@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Driver {
+public class Driver implements Comparable<Driver>{
 
     @JsonProperty("id")
     private Long id;
@@ -79,6 +79,12 @@ public class Driver {
     public String toString() {
         return "Driver [id=" + id + ", createdAt=" + createdAt + ", firstName=" + firstName +  ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + "]";
     }
-    
+
+    @Override
+    public int compareTo(Driver o) {
+        return firstName.compareTo(o.firstName) + 
+        lastName.compareTo(o.lastName) + 
+        dateOfBirth.compareTo(o.dateOfBirth);
+    }
     
 }
