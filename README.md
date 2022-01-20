@@ -1,8 +1,8 @@
 # Drivers Tracking Java + Spring boot + Thymeleaf Web RestAPI App
 
-This is aimed at keeping track of the drivers in a company and adding new ones when needed.
+This is aimed at keeping track of the drivers in the company and adding new ones when needed.
 
-a driver record consists of the following information:
+A driver record consists of the following information:
 - A unique ID for the driver :Long
 - First Name: String
 - Last Name: String
